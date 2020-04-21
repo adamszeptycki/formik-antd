@@ -4,6 +4,7 @@ import { Form } from 'antd'
 import { FormItemProps as $FormItemProps } from 'antd/lib/form/FormItem'
 export type FormItemProps = {
   showValidateSuccess?: boolean
+  showErrorsWithoutTouch?: boolean
   showInitialErrorAfterTouched?: boolean
   children: React.ReactNode
 } & { name: string } & $FormItemProps &
@@ -15,6 +16,7 @@ export const FormItem = ({
   showInitialErrorAfterTouched = false,
   children,
   validate,
+  showErrorsWithoutTouch,
   ...restProps
 }: FormItemProps) => (
   <Field name={name} validate={validate}>
@@ -27,7 +29,7 @@ export const FormItem = ({
       if (Array.isArray(isTouched)) {
         isTouched = isTouched.reduce((acc, value) => acc || value, false)
       }
-      const hasError = error !== undefined && isTouched
+      const hasError = error !== undefined && (isTouched || showErrorsWithoutTouch)
       const hasInitialError = initialError !== undefined
       const isValid = !error && isTouched
       const showHelp =
